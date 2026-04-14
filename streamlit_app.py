@@ -82,15 +82,21 @@ def get_first_scene():
     You are a Game Master persona that runs the dungeon crawler.
 
     Task:
-    Give a short background first.
+    Give a SHORT BACKGROUND first.
     Then give exactly THREE choices about actions/behaviors.
 
     RULE:
-    - It must give exactly three choices.
+    - It must give exactly THREE choices.
     - Please give out a short background.
     - Output format should be plain text only.
     - Do NOT write markdown code fences.
     - Do NOT write explanations outside the structure.
+    RULE:
+    - You MUST provide exactly 3 choices.
+    - Each choice MUST be a full sentence.
+    - DO NOT leave any choice empty.
+    - DO NOT write "3." without content.
+    - If unsure, still create a reasonable choice.
 
     Use this structure exactly:
 
@@ -132,6 +138,12 @@ def get_followup(choice_picked):
     3) Describe what happens next briefly.
     4) Update the player's stats (HP, Attackpower, shield) if needed.
     5) Then present the next scene AND exactly THREE new choices.
+    RULE:
+    - You MUST provide exactly 3 choices.
+    - Each choice MUST be a full sentence.
+    - DO NOT leave any choice empty.
+    - DO NOT write "3." without content.
+    - If unsure, still create a reasonable choice.
 
     Output format (plain text only, no JSON, no braces, no code fences):
 
@@ -217,14 +229,12 @@ st_yled.title("Dungeon Story Game", color="#2d1dbdff")
 if not st.session_state.started:
     # this code from OpenAI: with st_yled.container()
     with st_yled.container(
-        background_color="#1a1a2e",
-        border_color="#53354a",
+        background_color="#4e29ca",
         padding="20px"
     ):
-        st.write("Enter your character name to begin.")
-        name = st.text_input("Character Name")
+       name = st_yled.text_input("Enter your character name to begin.", color="#f86515ff")
 
-        if st_yled.button("Start Game", color="#3255c6ff"):
+    if st_yled.button("Start Game", color="#3255c6ff"):
             if not name.strip():
                 st.warning("Enter your name please.")
             else:
@@ -241,11 +251,11 @@ else:
     with col1:
         with st_yled.container(
             background_color="#1a1a2e",
-            border_color="#4a0e0e",
+            border_color="#f9ce6a",
             padding="20px"
         ):
-            st.subheader("Background")
-            st.write(extract_background(st.session_state.current_text))
+            st_yled.subheader("Background",color="#159df8ff")
+            st_yled.write(extract_background(st.session_state.current_text),color="#f8651500")
 
         st.write("")
 
@@ -256,7 +266,7 @@ else:
                 border_color="#6a0572",
                 padding="15px"
             ):
-                st.write(f"**Result:** {st.session_state.last_result}")
+                st_yled.write(f"Result: {st.session_state.last_result}",color="#f0efefff")
 
         st.write("")
 
@@ -266,16 +276,19 @@ else:
             border_color="#0f3460",
             padding="20px"
         ):
-            st.subheader("Choice")
+            st_yled.subheader("Choice",color="#cef815bc")
 
             if len(st.session_state.current_choices) == 3:
-                selected_choice = st.radio(
+                st.write(st.session_state.current_choices)
+                selected_choice = st_yled.radio(
                     "Choose one action:",
                     st.session_state.current_choices,
-                    key=f"choice_{st.session_state.turn}"
-                )
+                    key=f"choice_{st.session_state.turn}",
+                    color="#76c2f9bc"
+                ) # those  line from openai
+            
 
-                if st_yled.button("Confirm Choice", color="#4d96ff"):
+                if st_yled.button("Confirm Choice", color="#fff94de2"):
                     get_followup(selected_choice)
                     st.session_state.turn += 1
                     st.rerun()
@@ -289,13 +302,13 @@ else:
             border_color="#38bdf8",
             padding="20px"
         ):
-            st.subheader("Value of Character")
-            st.write(f"Name: {st.session_state.player_name}")
-            st.write(f"HP: {st.session_state.HP}")
-            st.write(f"Attack: {st.session_state.Attackpower}")
-            st.write(f"Shield: {st.session_state.shield}")
-            st.write(f"Special Ability: {st.session_state.specialability}")
-            st.write(f"Inventory: {st.session_state.Inventory}")
+            st_yled.subheader("Value of Character",color="#38bdf8")
+            st_yled.write(f"Name: {st.session_state.player_name}",color="#38bdf8")
+            st_yled.write(f"HP: {st.session_state.HP}",color="#38bdf8")
+            st_yled.write(f"Attack: {st.session_state.Attackpower}",color="#38bdf8")
+            st_yled.write(f"Shield: {st.session_state.shield}",color="#38bdf8")
+            st_yled.write(f"Special Ability: {st.session_state.specialability}",color="#38bdf8")
+            st_yled.write(f"Inventory: {st.session_state.Inventory}",color="#38bdf8")
 
         st.write("")
 
